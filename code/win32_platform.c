@@ -17,6 +17,7 @@ global_variable Render_Buffer render_buffer;
 
 #include "software_rendering.c"
 #include "game.c"
+#include "collision.c"
 
 internal LRESULT
 window_callback(HWND window, UINT message, WPARAM w_Param, LPARAM l_Param)
@@ -129,8 +130,14 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
             }
         }
 
-        //Simulation
+        POINT mouse_pointer;
+        GetCursorPos(&mouse_pointer);
+        ScreenToClient(window, &mouse_pointer);
 
+        input.mouse.x = mouse_pointer.x;
+        input.mouse.y = render_buffer.height - mouse_pointer.y;
+
+        //Simulation
         simulate_game(&input, last_dt);
 
         //Render
